@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directorio E-School</title>
+    <!-- Tailwind CSS para los estilos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React y Babel para ejecutar JSX en el navegador -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo, useEffect } = React;
+
+        const App = () => {
+            // Base de datos completa proporcionada
+            const schoolsData = [
+                { nombre: "A Child for Christ", id: "achild" },
+                { nombre: "Academia Colegio Ioseph", id: "academiaioseph" },
+                { nombre: "admin@ese.school", id: "crchristianschool" },
+                { nombre: "Bill Gates School", id: "billgatesschool" },
+                { nombre: "C.E eschool", id: "colegioeschool" },
+                { nombre: "CAPI HAPPY CRITTERS", id: "happycritters" },
+                { nombre: "Centro de Estudios La Salle", id: "lasalle" },
+                { nombre: "Centro de Formación Profesional San José", id: "cfp" },
+                { nombre: "Centro Escolar Católico Marista", id: "cecmarista" },
+                { nombre: "Centro Escolar Católico San Luis", id: "cec.sanluis" },
+                { nombre: "Colegio \"La Divina Providencia\"", id: "divinaprovidencia" },
+                { nombre: "COLEGIO ADVENTISTA DE QUEZALTEPEQUE", id: "caq" },
+                { nombre: "Colegio Adventista de Santa Tecla", id: "cast" },
+                { nombre: "Colegio Adventista San Salvador", id: "cladventistass" },
+                { nombre: "Colegio Alejandro Fleming", id: "alejandrofleming" },
+                { nombre: "Colegio Alejo Carpentier", id: "alejocarpentier" },
+                { nombre: "COLEGIO BAUTISTA BELEN DAVID BEN GURION", id: "cdavidgurion" },
+                { nombre: "Colegio Bautista Emmanuel", id: "colegiobautistaemmanuel" },
+                { nombre: "Colegio Bautista Internacional", id: "cbi" },
+                { nombre: "Colegio Bautista Internacional Sonsonate", id: "cbis" },
+                { nombre: "COLEGIO BELÉN", id: "colegiobelen" },
+                { nombre: "Colegio Bilingue", id: "academiaeuropea" },
+                { nombre: "Colegio Carlos Fenney", id: "colegiofenney" },
+                { nombre: "Colegio Catolico Madre Emilia Siman", id: "emiliasiman" },
+                { nombre: "Colegio Champagnat", id: "champagnat" },
+                { nombre: "Colegio Citalá", id: "colegiocitala" },
+                { nombre: "Colegio Coronel Francisco Linares", id: "ccfl" },
+                { nombre: "Colegio Coronel Milton Antonio Andrade Cabrera", id: "cmac" },
+                { nombre: "Colegio Cristiano AMILAT", id: "amilat" },
+                { nombre: "COLEGIO CRISTIANO GUILLERMO GONZALEZ MARTINEZ", id: "cclggm" },
+                { nombre: "Colegio Cristiano Juan Benavides", id: "ccjb" },
+                { nombre: "Colegio Cristiano Prof. Justo Gonzalez Carrasco", id: "justogonzalez" },
+                { nombre: "Colegio Cristóbal Colón", id: "ccc" },
+                { nombre: "Colegio Demo 1", id: "colegiodemo1" },
+                { nombre: "Colegio Demo 2", id: "colegiodemo2" },
+                { nombre: "Colegio Demo 3", id: "colegiodemo3" },
+                { nombre: "Colegio Demo 4", id: "colegiodemo4" },
+                { nombre: "Colegio Demo 5", id: "colegiodemo5" },
+                { nombre: "Colegio Demo 6", id: "colegiodemo6" },
+                { nombre: "Colegio Demo 7", id: "colegiodemo7" },
+                { nombre: "Colegio Demo 8", id: "colegiodemo8" },
+                { nombre: "Colegio Dios de Israel", id: "colegiodiosdeisrael" },
+                { nombre: "Colegio Ecolegioe", id: "colegioe" },
+                { nombre: "Colegio E-school", id: "eseschool" },
+                { nombre: "Colegio El Camino", id: "colegioelcamino" },
+                { nombre: "Colegio El Espíritu Santo S.S", id: "cees" },
+                { nombre: "Colegio El Espíritu Santo Usulután", id: "ceesus" },
+                { nombre: "Colegio Emaus", id: "colegioemaus" },
+                { nombre: "Colegio Ese 2.0", id: "esedospuntocero" },
+                { nombre: "Colegio Esparza", id: "colegioesparza" },
+                { nombre: "Colegio Eucaristico Mercedario", id: "eucaristicomercedario" },
+                { nombre: "Colegio Eucarístico", id: "eucaristico" },
+                { nombre: "Colegio Evangelico Mision Centroamericana Santa Ana", id: "colegiemca" },
+                { nombre: "Colegio Evangélico Centroamericano", id: "ceca" },
+                { nombre: "COLEGIO GAMALIEL", id: "colegiogamaliel" },
+                { nombre: "Colegio García Flamenco", id: "garciaflamenco" },
+                { nombre: "Colegio Guadalupano", id: "guadalupano" },
+                { nombre: "Colegio Guadalupano de San Miguel", id: "guadalupanosm" },
+                { nombre: "COLEGIO INTERAMERICANO", id: "colegiointeramericano" },
+                { nombre: "Colegio Interamericano \"Licenciada Carmen Durán\"", id: "cinteramericano" },
+                { nombre: "COLEGIO INTERNACIONAL DE SAN SALVADOR", id: "internationalschool" },
+                { nombre: "Colegio Ioseph", id: "ioseph" },
+                { nombre: "Colegio Irena Sendler", id: "colegioirenasendler" },
+                { nombre: "Colegio Isabel Allende", id: "isabelayende" },
+                { nombre: "Colegio Jeshua", id: "colegiojeshua" },
+                { nombre: "Colegio Johan Kepler", id: "colegiojohankepler" },
+                { nombre: "Colegio John Bunyan School of Tomorrow", id: "cljohnbunyan" },
+                { nombre: "Colegio Josefino", id: "colegiojosefino" },
+                { nombre: "Colegio Josefino Nuestra Señora de La Paz", id: "cljosefinodelapaz" },
+                { nombre: "Colegio Josemaría Escriva", id: "josemariaescriva" },
+                { nombre: "Colegio José Ingenieros", id: "joseingenieros" },
+                { nombre: "Colegio Julio Verne", id: "julioverne" },
+                { nombre: "Colegio La Fe", id: "colegiolafe" },
+                { nombre: "Colegio Lamatepec", id: "lamatepec" },
+                { nombre: "Colegio Laura Lehtinen", id: "colegiolehtinen" },
+                { nombre: "COLEGIO LEÓN SIGUENZA", id: "leonsiguenza" },
+                { nombre: "Colegio Licda. Ana De Los Ángeles Escobar", id: "claae" },
+                { nombre: "Colegio Licenciada Mercedes Trejo De Recinos", id: "mercedestrejo" },
+                { nombre: "Colegio Licenciado Luis Alonso Aparicio Osegueda (CLAPSS)", id: "clapss" },
+                { nombre: "Colegio Maiti", id: "maitimaiti" },
+                { nombre: "Colegio Maria Auxiliadora", id: "cma" },
+                { nombre: "Colegio Maya", id: "colegiomaya" },
+                { nombre: "Colegio Monte Carmelo", id: "montecarmelo" },
+                { nombre: "COLEGIO MONTECARLO", id: "colegiomontecarlo" },
+                { nombre: "COLEGIO MONTESSORI", id: "montessoric" },
+                { nombre: "Colegio Nazareth", id: "nazareth" },
+                { nombre: "Colegio Nehemiah", id: "nehemiah" },
+                { nombre: "Colegio Nuevo Milenio", id: "nuevomilenio" },
+                { nombre: "Colegio Pancho Lara", id: "pancholara" },
+                { nombre: "Colegio Pedro Geoffroy Rivas", id: "colegiogeoffroy" },
+                { nombre: "COLEGIO PEQUEÑAS ESTRELLAS", id: "stars" },
+                { nombre: "Colegio Quiroz", id: "cquiroz" },
+                { nombre: "Colegio Renacimiento", id: "renacimiento" },
+                { nombre: "COLEGIO SALESIANO SAN JOSÉ", id: "colegiosanjose" },
+                { nombre: "Colegio Salvadoreño Bilingüe", id: "csb" },
+                { nombre: "COLEGIO SALVADOREÑO ESPAÑOL", id: "csespanol" },
+                { nombre: "Colegio San Antonio", id: "colegiosanantonio" },
+                { nombre: "Colegio San Francisco de Asis", id: "colegiosfa" },
+                { nombre: "Colegio Sor Isabel Castillo", id: "isabelcastillo" },
+                { nombre: "Colegio Tecnikids", id: "tecnikids" },
+                { nombre: "Colegio Villanueva", id: "villanueva" },
+                { nombre: "Colegio Ángel María Pedroza", id: "colegiopedroza" },
+                { nombre: "Complejo Educativo Católico San José", id: "cecsanjose" },
+                { nombre: "Development Ese Plus", id: "devplus" },
+                { nombre: "Escuela Bilingüe Maquilishuat", id: "ebm" },
+                { nombre: "Escuela Cristiana Cristo a las Naciones", id: "escuelacristianaecan" },
+                { nombre: "Escuela Cristiana Internacional", id: "eci" },
+                { nombre: "Escuela Interamericana", id: "interamericana" },
+                { nombre: "Escuela Nacional de Agricultura \"Roberto Quiñónez\"", id: "ena" },
+                { nombre: "Escuela Salesiana Maria Auxiliadora", id: "esma" },
+                { nombre: "Escuela Salesiana Maria Mazzarello", id: "esmm" },
+                { nombre: "Ese Plus", id: "eseplus" },
+                { nombre: "ESE TEAM", id: "eseteam" },
+                { nombre: "INSTITUTO CARMELITANO", id: "institutocarmelitano" },
+                { nombre: "Instituto Carmelitano San Jose", id: "icsanjose" },
+                { nombre: "Instituto Emiliani", id: "emiliani" },
+                { nombre: "Instituto José María Morelos", id: "institutojmm" },
+                { nombre: "Instituto María Auxiliadora Santa Ana", id: "inmariaauxiliadora" },
+                { nombre: "Instituto Morelos", id: "institutom" },
+                { nombre: "Jean Itard Bilingual School", id: "jibs" },
+                { nombre: "John Dewey School", id: "johndeweyschool" },
+                { nombre: "Kinder Amiguitos", id: "kinderamiguitos" },
+                { nombre: "Liceo \"Raúl Contreras\"", id: "raulcontrerasliceo" },
+                { nombre: "Liceo Cirstiano Reverendo Juan Bueno Guatajiagua", id: "lcguatajiagua" },
+                { nombre: "Liceo Cristiano Betuel", id: "betuel" },
+                { nombre: "Liceo Cristiano El Shaddai", id: "liceoshaddai" },
+                { nombre: "Liceo Cristiano Flavio Josefo", id: "flaviojosefo" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno", id: "lcrjb" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Ahuachapán", id: "lcahuachapan" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Amatepec", id: "lcamatepec" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Bosques del Rio", id: "lcbosquesdelrio" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Central", id: "central" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Ciudad Delgado", id: "ciudaddelgado" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Col. Costa Rica", id: "lccostarica" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Col. Dolores", id: "lcdolores" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Col. Las Margaritas", id: "lcmargaritas" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Comecayo", id: "lcomecayo" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno de la Colonia Coruña", id: "lccoruna" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno de Santiago Nonualco", id: "lcrjbsantiagon" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno del Barrio Candelaria", id: "lccandelaria" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno El Achiotal", id: "lcachiotal" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno El Granjero", id: "lcelgranjero" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno El Tinteral", id: "lctinteral" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Guadalupe", id: "lcguadalupe" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Matazano", id: "lcmatazano" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Metropoli", id: "lcmetropoli" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno San Antonio", id: "lcsanantonio" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno San Mateo", id: "lcsanmateo" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno San Miguel", id: "lcjuanbuenosanmiguel" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno San Vicente", id: "lcsanvicente" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Santa Ana", id: "lcsantaana" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Santa Anita", id: "lcsantaanita" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Santa Lucía", id: "lcsantalucia" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Sonsonate", id: "lcsonsonate" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Tacuba", id: "lctacuba" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Zacamil", id: "lczacamil" },
+                { nombre: "Liceo Cristiano Revdo. Juan Bueno Zacatecoluca", id: "lczacatecoluca" },
+                { nombre: "Liceo Cristiano Reverendo Juan Bueno \"San Benito\"", id: "lcsanbenito" },
+                { nombre: "Liceo Cristiano Reverendo Juan Bueno \"San Jose El Naranjo\"", id: "lclosnaranjos" },
+                { nombre: "LICEO CRISTIANO REVERENDO JUAN BUENO - LOS ALPES", id: "losalpes" },
+                { nombre: "Liceo Cristiano Reverendo Juan Bueno De Ciudad Arce", id: "lcciudarce" },
+                { nombre: "Liceo Cristiano Reverendo Juan Bueno Las Delicias", id: "lclasdelicias" },
+                { nombre: "Liceo Cristiano Reverendo Juan Bueno Modelo", id: "lcmodelo" },
+                { nombre: "Liceo Cristiano Reverendo Juan Bueno San Bartolo", id: "lcsanbartolo" },
+                { nombre: "Liceo Cristiano Reverendo Juan Bueno San Francisco Gotera", id: "lcsanfranciscogotera" },
+                { nombre: "Liceo Doctor Samuel Humberto Leiva Joyas", id: "samuelhumbertoleiva" },
+                { nombre: "Liceo Francisco Lopez Ramos", id: "liceoranciscolope" },
+                { nombre: "Liceo Francés", id: "liceofrances" },
+                { nombre: "Liceo Getsemani", id: "liceogetsemani" },
+                { nombre: "Liceo Golda Meir", id: "goldameir" },
+                { nombre: "Liceo Ladislao Leiva", id: "ladislaoleiva" },
+                { nombre: "Liceo Luis Arturo Lemus", id: "liceoluisarturolemus" },
+                { nombre: "LICEO SALVADOREÑO", id: "liceosalvadoreno" },
+                { nombre: "Liceo San Luis", id: "liceosanluis" },
+                { nombre: "Liceo Tecnologico Canadiense", id: "liteca" },
+                { nombre: "LOS ROBLES SCHOOL", id: "losroblesschool" },
+                { nombre: "Nikola Tesla Christian School", id: "nikolateslacs" },
+                { nombre: "School of Rock", id: "schoolofrock" },
+                { nombre: "U.E. Federico González Suárez", id: "fgsduran" },
+                { nombre: "United School of America", id: "usa" }
+            ];
+
+            const [searchTerm, setSearchTerm] = useState('');
+
+            useEffect(() => {
+                // Inicializar iconos después de renderizar
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, [searchTerm]);
+
+            const filteredSchools = useMemo(() => {
+                return schoolsData.filter(school =>
+                    school.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            }, [searchTerm]);
+
+            const getUrl = (id) => `https://www.ese.school/${id}`;
+
+            return (
+                <div className="min-h-screen p-4 md:p-8">
+                    <div className="max-w-4xl mx-auto">
+                        {/* Header */}
+                        <header className="mb-10 text-center">
+                            <div className="inline-flex items-center justify-center p-4 bg-indigo-600 text-white rounded-full mb-4 shadow-xl">
+                                <i data-lucide="globe" style={{width: 32, height: 32}}></i>
+                            </div>
+                            <h1 className="text-4xl font-black text-slate-800 tracking-tight mb-2">
+                                Directorio E-School
+                            </h1>
+                            <p className="text-slate-500 font-medium">
+                                Busca tu institución para acceder a su sitio web oficial.
+                            </p>
+                        </header>
+
+                        {/* Buscador */}
+                        <div className="relative mb-10">
+                            <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-indigo-500">
+                                <i data-lucide="search"></i>
+                            </div>
+                            <input
+                                type="text"
+                                className="block w-full pl-16 pr-6 py-5 bg-white border-0 rounded-3xl shadow-lg focus:ring-4 focus:ring-indigo-100 transition-all outline-none text-xl placeholder:text-slate-300"
+                                placeholder="Escribe el nombre del colegio..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                            {searchTerm && (
+                                <button 
+                                    onClick={() => setSearchTerm('')}
+                                    className="absolute inset-y-0 right-0 pr-6 flex items-center text-slate-400 hover:text-indigo-600 font-bold"
+                                >
+                                    Limpiar
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Tabla de resultados */}
+                        <div className="space-y-4">
+                            <div className="flex items-center justify-between px-4 mb-2">
+                                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Institución</span>
+                                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest hidden sm:block">Enlace de acceso</span>
+                            </div>
+
+                            {filteredSchools.map((school, index) => (
+                                <div key={index} className="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between group">
+                                    <div className="flex items-center gap-4 mb-4 sm:mb-0">
+                                        <div className="flex-shrink-0 w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
+                                            <i data-lucide="school"></i>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-lg font-bold text-slate-800 group-hover:text-indigo-700 transition-colors leading-tight">
+                                                {school.nombre}
+                                            </h3>
+                                            <code className="text-[11px] text-slate-400 font-mono">ID: {school.id}</code>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col sm:items-end gap-2">
+                                        <a
+                                            href={getUrl(school.id)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center justify-center gap-2 py-2.5 px-6 bg-slate-900 hover:bg-indigo-600 text-white rounded-xl font-bold transition-all text-sm group/btn"
+                                        >
+                                            <span>Visitar Sitio</span>
+                                            <i data-lucide="external-link" style={{width: 16, height: 16}}></i>
+                                        </a>
+                                        <span className="text-[10px] text-slate-400 truncate max-w-[200px] hidden sm:block">
+                                            {getUrl(school.id)}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Estado vacío */}
+                        {filteredSchools.length === 0 && (
+                            <div className="text-center py-20 bg-white rounded-3xl border-2 border-dashed border-slate-200">
+                                <div className="inline-flex items-center justify-center w-20 h-20 bg-slate-50 text-slate-200 rounded-full mb-6">
+                                    <i data-lucide="search" style={{width: 40, height: 40}}></i>
+                                </div>
+                                <h3 className="text-xl font-bold text-slate-700">Sin resultados</h3>
+                                <p className="text-slate-400">Prueba con otro nombre de colegio.</p>
+                            </div>
+                        )}
+
+                        <footer className="mt-16 text-center text-slate-400 text-xs pb-8">
+                            <p>© 2024 Directorio E-School — Portal Informativo</p>
+                        </footer>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
